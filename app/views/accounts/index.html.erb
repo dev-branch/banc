@@ -1,2 +1,26 @@
-yo
-hello world
+<h1 class="display-4">Account List</h1>
+
+<table class="table table-striped">
+    <thead class="thead-inverse">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Balance</th>
+            <th>Flags</th>
+            <th>Suspended?</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @accounts.each do |a| %>
+            <tr>
+                <td><%= link_to a.id, atm_account_path(a) %></td>
+                <td><%= link_to a.name, transactions_account_path(a) %></td>
+                <td><%= a.category %></td>
+                <td><%= number_to_currency a.balance %></td>
+                <td><%= a.flags %></td>
+                <td><%= a.is_suspended %></td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>

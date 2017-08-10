@@ -5,7 +5,7 @@ class Account < ApplicationRecord
     after_save :check_suspension
 
     def deposit(amount)
-        check_amount(amount)
+        return if check_amount(amount).any?
 
         ActiveRecord::Base.transaction do
             Transaction.create!(amount: amount, category: 'Deposit', account: self)
@@ -19,7 +19,7 @@ class Account < ApplicationRecord
             return
         end
 
-        check_amount(amount)
+        return if check_amount(amount).any?
 
         if amount <= self.balance
             ActiveRecord::Base.transaction do
@@ -47,12 +47,13 @@ class Account < ApplicationRecord
     end
 
     private
-    
+
     def check_amount(amount)
-        raise ArgumentError, 'amount is not numeric' if !amount.is_a? Numeric
-        raise ArgumentError, 'amount is not positive' if amount <= 0
+        self.errors.add(:amount, 'not a number') if !amount.is_a? Numeric
+        self.errors.add(:amount, 'is not greater than 0') if amount <= 0
+        self.errors
     end
-    
+
     def check_suspension
         if self.flags > 3
             self.update!(is_suspended: true, flags: 0)

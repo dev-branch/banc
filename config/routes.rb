@@ -1,11 +1,12 @@
 Rails.application.routes.draw do
     root to: 'accounts#index'
-    resources :accounts, only: [:index, :create, :new] do
+    resources :accounts, only: [:index, :new, :create] do
         member do
-            get '/aaa', to: 'accounts#aaa'
-        end
-        collection do
-            post '/bbb', to: 'accounts#bbb'
+            get '/transactions', to: 'accounts#transactions'
+            get '/atm', to: 'accounts#atm'
+            post '/deposit', to: 'accounts#deposit'
+            post '/withdraw', to: 'accounts#withdraw'
+            post '/clear', to: 'accounts#clear'
         end
     end
 end
