@@ -16,13 +16,14 @@ ActiveRecord::Schema.define(version: 20170809043142) do
   enable_extension "plpgsql"
 
   create_table "accounts", force: :cascade do |t|
+    t.string "name", null: false
     t.string "category", null: false
     t.decimal "balance", default: "0.0", null: false
     t.integer "flags", default: 0, null: false
     t.boolean "is_suspended", default: false, null: false
-    t.boolean "is_closed", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_accounts_on_name", unique: true
   end
 
   create_table "transactions", force: :cascade do |t|
